@@ -11,16 +11,13 @@ EXCHANGE_RATE = {'USD/EUR': 0.921624, 'EUR/USD': 1.08504, 'USD/GBP': 0.807053, '
 """Return item price and payment currency from user input"""
 def input_price_and_currency():
     print ('Please type item price and press enter:')
-    price = input()
-    while not price.isdigit():
-        print ('Please type valid price value')
-        price = input()
+    price = float(input())
     print ('Please type currency from list (USD, EUR, GBP, CHF, AUD):')
     currency = input()
     while currency.lower() not in ['usd', 'eur', 'gbp', 'chf', 'aud']:
         print ('Please type valid currency value from list (USD, EUR, GBP, CHF, AUD)')
         currency = input()
-    return float(price), currency.upper()
+    return price, currency.upper()
 
 """Return item price including 7% operation fee (3% bank fee and 4% company fee)"""
 def calculate_price_including_operation_fee(price: float) -> tuple:
@@ -67,16 +64,10 @@ def calculate_conversion_amount_including_conversion_fee(
         company_conv_fee = converted_amount * CONVERSION_COMPANY_FEE/100
         customer_balance[currency_buy] += customer_balance[currency_sell] * EXCHANGE_RATE[f'{currency_sell}/{currency_buy}'] - bank_conv_fee - company_conv_fee
         customer_payment += customer_balance[currency_sell] * EXCHANGE_RATE[f'{currency_sell}/{currency_buy}']
-        print(customer_balance[currency_sell] * EXCHANGE_RATE[f'{currency_sell}/{currency_buy}'])
-        print (customer_payment)
-        print()
         customer_balance[currency_sell] = 0
     else:
         customer_balance[currency_sell] -= to_conv_amount_including_fee / EXCHANGE_RATE[f'{currency_sell}/{currency_buy}']
         customer_payment += to_conv_amount_including_fee
-        print(to_conv_amount_including_fee)
-        print (customer_payment)
-        print()
         customer_balance[currency_buy] += to_conv_amount
     return customer_balance, company_conv_fee, customer_payment
 
